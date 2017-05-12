@@ -18,16 +18,16 @@ public:
     AbstractEditorBehavior* editorBehavior() { return m_editorBehavior.data(); }
 
     Q_INVOKABLE void example1Async(bool example1) {
-        QFutureWatcher<AsyncStatusInstance> *watcher = new QFutureWatcher<AsyncStatusInstance>(this);
-        connect(watcher, &QFutureWatcher<AsyncStatusInstance>::finished,
+        QFutureWatcher<AsyncStatusPointer> *watcher = new QFutureWatcher<AsyncStatusPointer>(this);
+        connect(watcher, &QFutureWatcher<AsyncStatusPointer>::finished,
                 this, &Editor::onExample1Finished);
         watcher->setFuture ( m_editorBehavior->performExample1(example1) );
     }
 
     Q_INVOKABLE void undoAsync() {
         if (m_editorBehavior->canUndo()) {
-            QFutureWatcher<AsyncStatusInstance> *watcher = new QFutureWatcher<AsyncStatusInstance>(this);
-            connect(watcher, &QFutureWatcher<AsyncStatusInstance>::finished,
+            QFutureWatcher<AsyncStatusPointer> *watcher = new QFutureWatcher<AsyncStatusPointer>(this);
+            connect(watcher, &QFutureWatcher<AsyncStatusPointer>::finished,
                     this, &Editor::onUndoFinished);
             watcher->setFuture ( m_editorBehavior->performUndo() );
         }
@@ -35,8 +35,8 @@ public:
 
     Q_INVOKABLE void redoAsync() {
         if (m_editorBehavior->canRedo()) {
-            QFutureWatcher<AsyncStatusInstance> *watcher = new QFutureWatcher<AsyncStatusInstance>(this);
-            connect(watcher, &QFutureWatcher<AsyncStatusInstance>::finished,
+            QFutureWatcher<AsyncStatusPointer> *watcher = new QFutureWatcher<AsyncStatusPointer>(this);
+            connect(watcher, &QFutureWatcher<AsyncStatusPointer>::finished,
                     this, &Editor::onRedoFinished);
             watcher->setFuture ( m_editorBehavior->performRedo() );
         }
@@ -50,20 +50,20 @@ signals:
 
 private slots:
     void onExample1Finished() {
-        QFutureWatcher<AsyncStatusInstance> *watcher =
-                dynamic_cast<QFutureWatcher<AsyncStatusInstance>*> (sender());
+        QFutureWatcher<AsyncStatusPointer> *watcher =
+                dynamic_cast<QFutureWatcher<AsyncStatusPointer>*> (sender());
         emit example1Finished( watcher->result().objectCast<AsyncExample1Status>().data() );
         watcher->deleteLater();
     }
     void onUndoFinished() {
-        QFutureWatcher<AsyncStatusInstance> *watcher =
-                dynamic_cast<QFutureWatcher<AsyncStatusInstance>*> (sender());
+        QFutureWatcher<AsyncStatusPointer> *watcher =
+                dynamic_cast<QFutureWatcher<AsyncStatusPointer>*> (sender());
         emit undoFinished( watcher->result().objectCast<AbstractAsyncStatus>().data() );
         watcher->deleteLater();
     }
     void onRedoFinished() {
-        QFutureWatcher<AsyncStatusInstance> *watcher =
-                dynamic_cast<QFutureWatcher<AsyncStatusInstance>*> (sender());
+        QFutureWatcher<AsyncStatusPointer> *watcher =
+                dynamic_cast<QFutureWatcher<AsyncStatusPointer>*> (sender());
         emit redoFinished( watcher->result().objectCast<AbstractAsyncStatus>().data() );
         watcher->deleteLater();
     }

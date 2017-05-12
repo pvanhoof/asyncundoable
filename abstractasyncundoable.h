@@ -19,23 +19,23 @@ public:
     virtual int extra() = 0;
 };
 
-typedef QSharedPointer<AbstractAsyncStatus> AsyncStatusInstance;
+typedef QSharedPointer<AbstractAsyncStatus> AsyncStatusPointer;
 
 class AbstractAsyncUndoable: public QUndoCommand
 {
 public:
     AbstractAsyncUndoable( QUndoCommand *parent = nullptr )
         : QUndoCommand ( parent )
-        , m_undoFuture ( new QFutureInterface<AsyncStatusInstance>() )
-        , m_redoFuture ( new QFutureInterface<AsyncStatusInstance>() ) {}
-    QFuture<AsyncStatusInstance> undoFuture()
+        , m_undoFuture ( new QFutureInterface<AsyncStatusPointer>() )
+        , m_redoFuture ( new QFutureInterface<AsyncStatusPointer>() ) {}
+    QFuture<AsyncStatusPointer> undoFuture()
         { return m_undoFuture->future(); }
-    QFuture<AsyncStatusInstance> redoFuture()
+    QFuture<AsyncStatusPointer> redoFuture()
         { return m_redoFuture->future(); }
 
 protected:
-    QScopedPointer<QFutureInterface<AsyncStatusInstance> > m_undoFuture;
-    QScopedPointer<QFutureInterface<AsyncStatusInstance> > m_redoFuture;
+    QScopedPointer<QFutureInterface<AsyncStatusPointer> > m_undoFuture;
+    QScopedPointer<QFutureInterface<AsyncStatusPointer> > m_redoFuture;
 
 };
 

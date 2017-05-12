@@ -13,9 +13,9 @@ class AbstractEditorBehavior : public QObject
 public:
     AbstractEditorBehavior( QObject *parent) : QObject (parent) {}
 
-    virtual QFuture<AsyncStatusInstance> performExample1( bool example1 ) = 0;
-    virtual QFuture<AsyncStatusInstance> performUndo() = 0;
-    virtual QFuture<AsyncStatusInstance> performRedo() = 0;
+    virtual QFuture<AsyncStatusPointer> performExample1( bool example1 ) = 0;
+    virtual QFuture<AsyncStatusPointer> performUndo() = 0;
+    virtual QFuture<AsyncStatusPointer> performRedo() = 0;
     virtual bool canRedo() = 0;
     virtual bool canUndo() = 0;
 };

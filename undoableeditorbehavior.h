@@ -12,13 +12,13 @@ public:
         : AbstractEditorBehavior (parent)
         , m_undoStack ( new QUndoStack ){}
 
-    QFuture<AsyncStatusInstance> performExample1( bool example1 ) Q_DECL_OVERRIDE {
+    QFuture<AsyncStatusPointer> performExample1( bool example1 ) Q_DECL_OVERRIDE {
         AsyncExample1Command *command = new AsyncExample1Command ( example1 );
         m_undoStack->push(command);
         return command->redoFuture();
     }
 
-    QFuture<AsyncStatusInstance> performUndo() {
+    QFuture<AsyncStatusPointer> performUndo() {
         const AbstractAsyncUndoable *undoable =
             dynamic_cast<const AbstractAsyncUndoable *>(
                     m_undoStack->command( m_undoStack->index() - 1));
@@ -26,7 +26,7 @@ public:
         return const_cast<AbstractAsyncUndoable*>(undoable)->undoFuture();
     }
 
-    QFuture<AsyncStatusInstance> performRedo() {
+    QFuture<AsyncStatusPointer> performRedo() {
         const AbstractAsyncUndoable *undoable =
             dynamic_cast<const AbstractAsyncUndoable *>(
                     m_undoStack->command( m_undoStack->index() ));
